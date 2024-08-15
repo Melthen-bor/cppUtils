@@ -4,10 +4,12 @@
 #include <string>
 #include <sstream>
 using namespace std;
+#ifdef SMALL_UGROW
 struct small_ugrow {
 	unsigned location;
 	unsigned char val;
 };
+#endif
 class ugrow {
 	vector<unsigned char> value;
 public:
@@ -162,7 +164,8 @@ public:
 		}
 		return out;
 	}
-	/*operator small_ugrow() {
+#ifdef SMALL_UGROW
+	operator small_ugrow() {
 		unsigned char byte = this->get_byte(this->size() - 1);
 		if (this->get_byte(this->size() - 2) > 127) {
 			if (byte == 255) {
@@ -171,7 +174,8 @@ public:
 			byte++;
 		}
 		return small_ugrow{ this->size() - 1,255 };
-	}*/
+	}
+#endif
 	ugrow& operator --() {
 		this->decrement_byte(0);
 		this->remove_excess();
@@ -190,6 +194,7 @@ public:
 			count++;
 		}
 	}
+#ifdef SMALL_UGROW
 	void operator -(small_ugrow other) {
 		this->add_bytes(other.location - (this->size() - 1));
 		unsigned char count = 0;
@@ -198,6 +203,7 @@ public:
 			count++;
 		}
 	}
+#endif
 	void operator +(ugrow other) {
 		ugrow count(0);
 		while (count < other) {
@@ -205,6 +211,7 @@ public:
 			count++;
 		}
 	}
+#ifdef SMALL_UGROW
 	void operator +(small_ugrow other) {
 		this->add_bytes(other.location - (this->size() - 1));
 		unsigned char count = 0;
@@ -217,6 +224,7 @@ public:
 		this->value = vector<unsigned char>();
 		this->operator+(val);
 	}
+#endif
 	void operator *(ugrow other) {
 		ugrow temp(this->value);
 		ugrow count(0);
@@ -233,6 +241,7 @@ public:
 			count++;
 		}
 	}
+#ifdef SMALL_UGROW
 	void operator *(small_ugrow other) {
 		ugrow producer(other);
 		this->operator*(producer);
@@ -241,6 +250,8 @@ public:
 		ugrow producer(other);
 		this->operator/(producer);
 	}
+#endif
+#ifdef STRING_FUNCTIONS_LOADED
 	string to_string() {
 		if (this->size() == 0) {
 			return "0";
@@ -253,6 +264,7 @@ public:
 		}
 		return out.str();
 	}
+#endif
 	void reset_value() {
 		while (this->size() > 0) {
 			this->pop_byte();
@@ -267,6 +279,7 @@ public:
 	void load_byte(signed char byte) {
 		this->load_byte((unsigned char)byte);
 	}
+#ifdef STRING_FUNCTIONS_LOADED
 	string encode() {
 		unsigned count = 0;
 		string out;
@@ -276,5 +289,6 @@ public:
 		}
 		return out;
 	}
+#endif
 };
 #endif
