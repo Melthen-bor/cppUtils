@@ -4,6 +4,10 @@
 #include <string>
 #include <sstream>
 using namespace std;
+struct small_ugrow {
+	unsigned location;
+	unsigned char val;
+};
 class ugrow {
 	vector<unsigned char> value;
 public:
@@ -186,14 +190,14 @@ public:
 			count++;
 		}
 	}
-	/*void operator -(small_ugrow other) {
+	void operator -(small_ugrow other) {
 		this->add_bytes(other.location - (this->size() - 1));
 		unsigned char count = 0;
 		while (count < other.val) {
 			this->decrement_byte(other.location);
 			count++;
 		}
-	}*/
+	}
 	void operator +(ugrow other) {
 		ugrow count(0);
 		while (count < other) {
@@ -201,7 +205,7 @@ public:
 			count++;
 		}
 	}
-	/*void operator +(small_ugrow other) {
+	void operator +(small_ugrow other) {
 		this->add_bytes(other.location - (this->size() - 1));
 		unsigned char count = 0;
 		while (count < other.val) {
@@ -212,7 +216,7 @@ public:
 	ugrow(small_ugrow val) {
 		this->value = vector<unsigned char>();
 		this->operator+(val);
-	}*/
+	}
 	void operator *(ugrow other) {
 		ugrow temp(this->value);
 		ugrow count(0);
@@ -229,14 +233,14 @@ public:
 			count++;
 		}
 	}
-	/*void operator *(small_ugrow other) {
+	void operator *(small_ugrow other) {
 		ugrow producer(other);
 		this->operator*(producer);
 	}
 	void operator /(small_ugrow other) {
 		ugrow producer(other);
 		this->operator/(producer);
-	}*/
+	}
 	string to_string() {
 		if (this->size() == 0) {
 			return "0";
